@@ -37,7 +37,7 @@ export default class App {
 			id: 'password', label: '비밀번호', placeholder: '비밀번호를 입력해주세요',
 		});
 
-		const addressField = new AddressField('#required-fields', {
+		const addressField = new AddressField('#optional-fields', {
 			id: 'address', label: '배송지 주소',
 		});
 
@@ -56,8 +56,10 @@ export default class App {
 
 	private validFieldMonitor = () => {
 		const btnJoin = this.container.querySelector('#btn-join') as HTMLElement;
-
+		
 		if(this.fields.filter(field => field.isValid).length === this.fields.length) {
+			// filter메소드를 이용하여 field의 isVaild 가 true인 field만 뽑아 새 배열로 반환.	
+			// true인 field의 수와 this.field의 수가 같으면.
 			this.active = true;
 			btnJoin.classList.remove('bg-gray-300');
 			btnJoin.classList.add('bg-gray-500');
@@ -71,11 +73,11 @@ export default class App {
 	private onSubmit = (e: Event) => {
 		e.preventDefault();
 
-		if (!this.active) return;
+		if (!this.active) return;  // this.active 가 false면 return 시키고 true면 통과
 
 		const submitData: AnyObject = this.fields
-			.map(field => ({ [field.name]: field.value }))
-			.reduce((a, b) => ({...a, ...b}), {});
+			.map(field => ({ [field.name]: field.value })) // map 함수는 전달된 함수의 결과를 새로운 배열로 반환.
+			.reduce((a, b) => ({...a, ...b}), {}); // reduce 초기값과 전달되는 값을 하나로 합친 결과물을 반환 
 
 		console.log(submitData);
 	}

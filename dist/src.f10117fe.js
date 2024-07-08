@@ -312,6 +312,7 @@ var TextField = /** @class */function () {
       });
       // validateRules.rule.test(target)을 통해 결과와 validateRule.match의 값이 동일하지 않는 rule만 모아 새로운 배열로 반환
       // RegExp의 메소드 test를 이용하여 target 문자열을 던저 정규 표현식에 부합한지 확인 결과를 true/false로 반환
+      // console.log(invalidateRules);
       return invalidateRules.length > 0 ? invalidateRules[0] : null;
       // InvalidateRules.length 값이 0보다 클경우 InvalidateRules[0] 요소 반환, 아니라면 null 반환
     };
@@ -441,6 +442,11 @@ var StrongLevel;
   StrongLevel[StrongLevel["Medium"] = 2] = "Medium";
   StrongLevel[StrongLevel["Havey"] = 3] = "Havey";
 })(StrongLevel || (StrongLevel = {}));
+/**
+ * Tuple 형식 :
+ * - 선언시점 길이가 고정된다.
+ * - 정해진 타입순서, 튜플은 각 요소는 특정 타입을 가진다. 이 타입순서는 고정되어있다.
+ */
 var StrongMessage = ['금지된 수준', '심각한 수준', '보통 수준', '강력한 암호'];
 var DefaultProps = {
   id: '',
@@ -491,10 +497,10 @@ var PasswordField = /** @class */function () {
         updated: _this.updated,
         valid: _this.updated ? !isInvalid : true,
         strongMessage: strongLevel < 0 ? '' : StrongMessage[strongLevel],
-        stringLevel0: strongLevel >= 1,
-        stringLevel1: strongLevel >= 2,
-        stringLevel2: strongLevel >= 3,
-        stringLevel3: strongLevel >= 4
+        strongLevel0: strongLevel >= 1,
+        strongLevel1: strongLevel >= 2,
+        strongLevel2: strongLevel >= 3,
+        strongLevel3: strongLevel >= 4
       });
     };
     this.validate = function () {
@@ -543,6 +549,13 @@ var PasswordField = /** @class */function () {
   Object.defineProperty(PasswordField.prototype, "value", {
     get: function get() {
       return this.data.text || '';
+    },
+    enumerable: false,
+    configurable: true
+  });
+  Object.defineProperty(PasswordField.prototype, "isValid", {
+    get: function get() {
+      return !this.validate();
     },
     enumerable: false,
     configurable: true
@@ -642,7 +655,7 @@ var App = /** @class */function () {
         label: '비밀번호',
         placeholder: '비밀번호를 입력해주세요'
       });
-      var addressField = new views_1.AddressField('#required-fields', {
+      var addressField = new views_1.AddressField('#optional-fields', {
         id: 'address',
         label: '배송지 주소'
       });
@@ -661,6 +674,8 @@ var App = /** @class */function () {
       if (_this.fields.filter(function (field) {
         return field.isValid;
       }).length === _this.fields.length) {
+        // filter메소드를 이용하여 field의 isVaild 가 true인 field만 뽑아 새 배열로 반환.	
+        // true인 field의 수와 this.field의 수가 같으면.
         _this.active = true;
         btnJoin.classList.remove('bg-gray-300');
         btnJoin.classList.add('bg-gray-500');
@@ -672,13 +687,14 @@ var App = /** @class */function () {
     };
     this.onSubmit = function (e) {
       e.preventDefault();
-      if (!_this.active) return;
+      if (!_this.active) return; // this.active 가 false면 return 시키고 true면 통과
       var submitData = _this.fields.map(function (field) {
         var _a;
         return _a = {}, _a[field.name] = field.value, _a;
-      }).reduce(function (a, b) {
+      }) // map 함수는 전달된 함수의 결과를 새로운 배열로 반환.
+      .reduce(function (a, b) {
         return __assign(__assign({}, a), b);
-      }, {});
+      }, {}); // reduce 초기값과 전달되는 값을 하나로 합친 결과물을 반환 
       console.log(submitData);
     };
     this.render = function () {
@@ -738,7 +754,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53253" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50145" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

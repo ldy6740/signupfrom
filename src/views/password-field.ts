@@ -19,6 +19,11 @@ type Props = {
 	strong?: StrongLevel;
 }
 
+/**
+ * Tuple 형식 : 
+ * - 선언시점 길이가 고정된다. 
+ * - 정해진 타입순서, 튜플은 각 요소는 특정 타입을 가진다. 이 타입순서는 고정되어있다.
+ */
 const StrongMessage: [string, string, string, string] = [
 	'금지된 수준',
 	'심각한 수준',
@@ -93,10 +98,10 @@ export default class PasswordField {
 			updated: this.updated,
 			valid: this.updated ? !isInvalid : true,
 			strongMessage: strongLevel < 0 ? '' : StrongMessage[strongLevel],
-			stringLevel0: strongLevel >= 1,
-			stringLevel1: strongLevel >= 2,
-			stringLevel2: strongLevel >= 3,
-			stringLevel3: strongLevel >= 4,
+			strongLevel0: strongLevel >= 1,
+			strongLevel1: strongLevel >= 2,
+			strongLevel2: strongLevel >= 3,
+			strongLevel3: strongLevel >= 4,
 		};
 	}
 
@@ -108,6 +113,7 @@ export default class PasswordField {
 
 		return (invalidateRules.length > 0) ? invalidateRules[0] : null;
 	}
+
 	private update = () => {
 		const container = document.querySelector(`#field-${this.data.id}`) as HTMLElement;
 		const docFrag = document.createElement('div');
@@ -123,6 +129,10 @@ export default class PasswordField {
 
 	public get value(): string {
 		return this.data.text || '';
+	}
+
+	public get isValid(): boolean {
+		return !this.validate();
 	}
 
 	public addValidateRule = (rule:ValidateRule) => {

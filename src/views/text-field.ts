@@ -47,7 +47,7 @@ export default class TextField {
 			// validateRules.rule.test(target)을 통해 결과와 validateRule.match의 값이 동일하지 않는 rule만 모아 새로운 배열로 반환
 			// RegExp의 메소드 test를 이용하여 target 문자열을 던저 정규 표현식에 부합한지 확인 결과를 true/false로 반환
 
-
+		// console.log(invalidateRules);
 		return (invalidateRules.length > 0) ? invalidateRules[0] : null;
 		// InvalidateRules.length 값이 0보다 클경우 InvalidateRules[0] 요소 반환, 아니라면 null 반환
 	}
